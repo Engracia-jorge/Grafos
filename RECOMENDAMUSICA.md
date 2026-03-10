@@ -1,4 +1,4 @@
-## Documento Técnico – Algoritmo de Recomendação de Música com Grafos
+## Desafio 2 – Algoritmo de Recomendação de Música com Grafos
 
 
 # 🎯 Objetivo
