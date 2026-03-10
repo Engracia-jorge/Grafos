@@ -7,10 +7,10 @@ O sistema tem como finalidade recomendar músicas para usuários com base em sua
 e nas conexões entre músicas, artistas e gêneros. A escolha por grafos se deve à capacidade de representar relações
 complexas e explorar caminhos entre entidades de forma eficiente.
 
-
+---
 ## 🧩 Modelagem do Grafo
 
-# Entidades (nós)
+### Entidades (nós)
 
 Usuário
 
@@ -34,7 +34,7 @@ Gênero
 
 (Musica)-[:PERTENCE_A {peso}]->(Genero)
 
-
+---
 ## ⚙️ Funcionamento do Algoritmo
 
 # Coleta de dados
@@ -48,6 +48,8 @@ Logs de escuta, curtidas, seguidores e metadados de músicas.
 Inserção dos nós e arestas no banco de grafos (ex.: Neo4j).
 
 Cada interação recebe propriedades (peso, data, frequência).
+
+<img width="761" height="374" alt="Image" src="https://github.com/user-attachments/assets/8135c7bf-8c8e-4353-bcc6-e7dea4b4ce83" />
 
 
 # Exploração de ligações
@@ -73,7 +75,7 @@ As músicas encontradas são ordenadas por relevância (popularidade, proximidad
 
 O sistema retorna uma lista personalizada de recomendações.
 
-
+---
 ## 🔎 Exemplos de Queries Cypher
 
 # Músicas de artistas seguidos
@@ -94,7 +96,7 @@ WHERE NOT (u)-[:ESCUTAR]->(rec)
 RETURN rec.titulo AS recomendacao, COUNT(*) AS popularidade
 ORDER BY popularidade DESC;
 
-
+---
 ## 📌 Benefícios da abordagem em grafos
 
 Captura relações complexas além de simples “usuário ouviu música”.
