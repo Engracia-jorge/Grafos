@@ -1,4 +1,4 @@
-# Desafio 1 Grafos
+# Desafio 1 Modelagem de dados em grafos de um serviço de streaming
 # 🎬 Neo4j - Filmes, Séries e Usuários
 
 Este projeto demonstra como modelar um grafo no **Neo4j** com entidades relacionadas a usuários, filmes, séries, gêneros, atores e diretores.  
