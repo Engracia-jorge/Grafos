@@ -8,6 +8,7 @@ e nas conexões entre músicas, artistas e gêneros. A escolha por grafos se dev
 complexas e explorar caminhos entre entidades de forma eficiente.
 
 ---
+
 ## 🧩 Modelagem do Grafo
 
 ### Entidades (nós do grafo)
@@ -23,28 +24,29 @@ Gênero
 
 ## Interações (arestas com propriedades)
 
-Usuário → Música
+**Usuário → Música**
 
 ESCUTAR (propriedade: frequência, duração, timestamp)
 
 CURTIR (propriedade: intensidade, data)
 
-Usuário → Artista
+**Usuário → Artista**
 
 SEGUIR (propriedade: desde quando segue, nível de engajamento)
 
-Música → Artista
+**Música → Artista**
 
 CRIADA_POR (propriedade: colaboração, participação)
 
-Música → Gênero
+**Música → Gênero**
 
 PERTENCE_A (propriedade: peso de classificação, subgênero)
 
 ---
-### Exemplo em Cypher (Neo4j)
 
-```cypher
+### Exemplo em Cypher (Neo4j)
+```
+cypher
 // Criar nós
 CREATE (:Usuario {id:'user_1', nome:'Ana'});
 CREATE (:Musica {id:'song_A', titulo:'Rock Song'});
@@ -65,8 +67,8 @@ MATCH (m:Musica {id:'song_A'}), (a:Artista {id:'artist_X'})
 CREATE (m)-[:CRIADA_POR {colaboracao:false}]->(a);
 
 MATCH (m:Musica {id:'song_A'}), (g:Genero {id:'rock'})
-CREATE (m)-[:PERTENCE_A {peso:1.0}]->(g);```
-
+CREATE (m)-[:PERTENCE_A {peso:1.0}]->(g);
+```
 ---
 ## ⚙️ Funcionamento do Algoritmo
 
@@ -76,7 +78,6 @@ Logs de escuta, curtidas, seguidores e metadados de músicas.
 
 
 # Diagrama do grafo
-
 
 Inserção dos nós e arestas no banco de grafos (ex.: Neo4j).
 
@@ -94,65 +95,70 @@ O algoritmo percorre o grafo para encontrar músicas relacionadas ao perfil do u
 # Algoritmos aplicados
 
 
-PageRank Personalizado: identifica músicas mais relevantes a partir das conexões do usuário.
+**PageRank Personalizado:** identifica músicas mais relevantes a partir das conexões do usuário.
 
-Node2Vec / DeepWalk: gera embeddings dos nós e calcula similaridade entre usuários e músicas.
+**Node2Vec / DeepWalk:** gera embeddings dos nós e calcula similaridade entre usuários e músicas.
 
-Detecção de Comunidades (Louvain): recomenda músicas dentro da comunidade musical do usuário.
+**Detecção de Comunidades (Louvain):** recomenda músicas dentro da comunidade musical do usuário.
 
 
 # Ranking e recomendação
-
 
 As músicas encontradas são ordenadas por relevância (popularidade, proximidade, novidade).
 
 O sistema retorna uma lista personalizada de recomendações.
 
 ---
+
 ## 🔎Consultas Cypher de recomendação
 
 # 1. Recomendar músicas de artistas seguidos
 
-```cypher
+```
 MATCH (u:Usuario {id:'user_1'})-[:SEGUIR]->(a:Artista)<-[:CRIADA_POR]-(m:Musica)
 RETURN m.titulo AS recomendacao
 ORDER BY m.titulo;
+```
 👉 Retorna músicas criadas por artistas que o usuário segue.
 
 # 2. Recomendar músicas semelhantes às já curtidas
 
-```cypher
+```
 MATCH (u:Usuario {id:'user_1'})-[:CURTIR]->(m1:Musica)-[:PERTENCE_A]->(g:Genero)<-[:PERTENCE_A]-(m2:Musica)
 WHERE NOT (u)-[:CURTIR]->(m2)
 RETURN DISTINCT m2.titulo AS recomendacao, g.id AS genero
 ORDER BY genero;
+```
 👉 Sugere músicas do mesmo gênero das que o usuário já curtiu.
 
 
 # 3. Recomendar músicas populares entre usuários semelhantes
 
-```cypher
+```
 MATCH (u:Usuario {id:'user_1'})-[:ESCUTAR]->(m:Musica)<-[:ESCUTAR]-(other:Usuario)-[:ESCUTAR]->(rec:Musica)
 WHERE NOT (u)-[:ESCUTAR]->(rec)
 RETURN rec.titulo AS recomendacao, COUNT(*) AS popularidade
 ORDER BY popularidade DESC;
+```
 👉 Sugere músicas que outros usuários com gostos semelhantes escutam.
 
 # 4. Recomendar músicas novas de artistas já escutados
 
-```cypher
+```
 MATCH (u:Usuario {id:'user_1'})-[:ESCUTAR]->(m:Musica)-[:CRIADA_POR]->(a:Artista)<-[:CRIADA_POR]-(novas:Musica)
 WHERE NOT (u)-[:ESCUTAR]->(novas)
 RETURN DISTINCT novas.titulo AS recomendacao, a.nome AS artista;
+```
 👉 Sugere músicas de artistas que o usuário já ouviu, mas ainda não escutou.
 
 ---
+
 ## 📌 Benefícios da abordagem em grafos
 
-Captura relações complexas além de simples “usuário ouviu música”.
+**Captura relações complexas além de simples “usuário ouviu música”.**
 
-Permite recomendações exploratórias e descoberta de novos artistas.
+**Permite recomendações exploratórias e descoberta de novos artistas.**
 
-Escalável para milhões de usuários e músicas.
+**Escalável para milhões de usuários e músicas.**
 
-Fácil integração com dados sociais (seguidores, playlists colaborativas).
+**Fácil integração com dados sociais (seguidores, playlists colaborativas).**
