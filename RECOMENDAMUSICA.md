@@ -13,38 +13,38 @@ complexas e explorar caminhos entre entidades de forma eficiente.
 
 ### Entidades (nós do grafo)
 
-Usuário
+**Usuário**
 
-Música
+**Música**
 
-Artista
+**Artista**
 
-Gênero
+**Gênero*+
 
 
-## Interações (arestas com propriedades)
+### Interações (arestas com propriedades)
 
 **Usuário → Música**
 
-ESCUTAR (propriedade: frequência, duração, timestamp)
+-`ESCUTAR (propriedade: frequência, duração, timestamp)`
 
-CURTIR (propriedade: intensidade, data)
+-`CURTIR (propriedade: intensidade, data)`
 
 **Usuário → Artista**
 
-SEGUIR (propriedade: desde quando segue, nível de engajamento)
+-`SEGUIR (propriedade: desde quando segue, nível de engajamento)`
 
 **Música → Artista**
 
-CRIADA_POR (propriedade: colaboração, participação)
+-`CRIADA_POR (propriedade: colaboração, participação)`
 
 **Música → Gênero**
 
-PERTENCE_A (propriedade: peso de classificação, subgênero)
+-`PERTENCE_A (propriedade: peso de classificação, subgênero)`
 
 ---
 
-### Exemplo em Cypher (Neo4j)
+## Exemplo em Cypher (Neo4j)
 ```
 cypher
 // Criar nós
@@ -72,12 +72,12 @@ CREATE (m)-[:PERTENCE_A {peso:1.0}]->(g);
 ---
 ## ⚙️ Funcionamento do Algoritmo
 
-# Coleta de dados
+### Coleta de dados
 
 Logs de escuta, curtidas, seguidores e metadados de músicas.
 
 
-# Diagrama do grafo
+### Diagrama do grafo
 
 Inserção dos nós e arestas no banco de grafos (ex.: Neo4j).
 
@@ -86,13 +86,13 @@ Cada interação recebe propriedades (peso, data, frequência).
 <img width="761" height="374" alt="Image" src="https://github.com/user-attachments/assets/8135c7bf-8c8e-4353-bcc6-e7dea4b4ce83" />
 
 
-# Exploração de ligações
+### Exploração de ligações
 
 
 O algoritmo percorre o grafo para encontrar músicas relacionadas ao perfil do usuário.
 
 
-# Algoritmos aplicados
+## Algoritmos aplicados
 
 
 **PageRank Personalizado:** identifica músicas mais relevantes a partir das conexões do usuário.
@@ -102,7 +102,7 @@ O algoritmo percorre o grafo para encontrar músicas relacionadas ao perfil do u
 **Detecção de Comunidades (Louvain):** recomenda músicas dentro da comunidade musical do usuário.
 
 
-# Ranking e recomendação
+### Ranking e recomendação
 
 As músicas encontradas são ordenadas por relevância (popularidade, proximidade, novidade).
 
@@ -112,7 +112,7 @@ O sistema retorna uma lista personalizada de recomendações.
 
 ## 🔎Consultas Cypher de recomendação
 
-# 1. Recomendar músicas de artistas seguidos
+### 1. Recomendar músicas de artistas seguidos
 
 ```
 MATCH (u:Usuario {id:'user_1'})-[:SEGUIR]->(a:Artista)<-[:CRIADA_POR]-(m:Musica)
@@ -121,7 +121,7 @@ ORDER BY m.titulo;
 ```
 👉 Retorna músicas criadas por artistas que o usuário segue.
 
-# 2. Recomendar músicas semelhantes às já curtidas
+### 2. Recomendar músicas semelhantes às já curtidas
 
 ```
 MATCH (u:Usuario {id:'user_1'})-[:CURTIR]->(m1:Musica)-[:PERTENCE_A]->(g:Genero)<-[:PERTENCE_A]-(m2:Musica)
@@ -132,7 +132,7 @@ ORDER BY genero;
 👉 Sugere músicas do mesmo gênero das que o usuário já curtiu.
 
 
-# 3. Recomendar músicas populares entre usuários semelhantes
+### 3. Recomendar músicas populares entre usuários semelhantes
 
 ```
 MATCH (u:Usuario {id:'user_1'})-[:ESCUTAR]->(m:Musica)<-[:ESCUTAR]-(other:Usuario)-[:ESCUTAR]->(rec:Musica)
@@ -142,7 +142,7 @@ ORDER BY popularidade DESC;
 ```
 👉 Sugere músicas que outros usuários com gostos semelhantes escutam.
 
-# 4. Recomendar músicas novas de artistas já escutados
+### 4. Recomendar músicas novas de artistas já escutados
 
 ```
 MATCH (u:Usuario {id:'user_1'})-[:ESCUTAR]->(m:Musica)-[:CRIADA_POR]->(a:Artista)<-[:CRIADA_POR]-(novas:Musica)
