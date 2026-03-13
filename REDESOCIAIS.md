@@ -17,15 +17,15 @@ posts, comentários e grupos. O objetivo é mostrar como consultas Cypher podem 
 
 # Relacionamentos (edges):
 
-(Usuario)-[:SEGUE]->(Usuario)
+-`(Usuario)-[:SEGUE]->(Usuario)`
 
-(Usuario)-[:POSTOU]->(Post)
+-`(Usuario)-[:POSTOU]->(Post)`
 
-(Usuario)-[:COMENTOU]->(Comentario)
+-`(Usuario)-[:COMENTOU]->(Comentario)`
 
-(Usuario)-[:MEMBRO_DE]->(Grupo)
+-`(Usuario)-[:MEMBRO_DE]->(Grupo)`
 
-(Post)-[:PERTENCE_A]->(Grupo)
+-`(Post)-[:PERTENCE_A]->(Grupo)`
 
 
 # Diagrama do grafo
